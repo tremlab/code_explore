@@ -28,19 +28,6 @@ def build_sudoku_board(values_str):
     return board
 
 
-def find_row_options(row):
-    """takes in a string representing the row values,
-        blank spaces represented by "." Returns set of possible remaining values.
-    """
-    row_options = set([1, 2, 3, 4, 5, 6, 7, 8, 9])
-
-    for char in row:
-        if char.isdigit():
-            row_options.discard(int(char))
-
-    return row_options
-
-
 class Board(object):
 
     def __init__(self):
