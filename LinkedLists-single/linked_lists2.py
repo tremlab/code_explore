@@ -4,11 +4,10 @@ Adventures in Algorithms
 """
 
 # singly-linked list
-
+###################
 
 class Node(object):
     """A basic node class to populate a singly-linked list.
-        Deliberately not using "tail", as an exercise.
     """
 
     def __init__(self, data=None, next_node=None):
@@ -18,114 +17,114 @@ class Node(object):
 
 class S_linked_list(object):
     """a robust class for singly-linked lists.
+        Deliberately not using "tail", as an exercise.
     """
 
     def __init__(self, head=None):
         self.head = head
 
-    def add_node(self, node):
-        """append a new node to the end of the list.
+    def add(self, value):
+        """shortcut for users to create node and append to list in one step.
+        """
+        node = Node(value)
+        self.__add_node__(node)
+
+    def __add_node__(self, node):
+        """append a new node to the end of the list. 
         """
 
         if self.head:
-            # check if list has cycle to prevent infinite while loop
-            if self.has_cycle():
-                print "error - list has a cycle"
-            else:
-                current = self.head
-                prev = None
 
-                #traverse to the last node in the list so far
-                while current:
-                    prev = current
-                    current = current.next
+            current = self.head
+            prev = None
 
-                prev.next = node
+            #traverse to the last node in the list so far
+            while current:
+                prev = current
+                current = current.next
+
+            prev.next = node
 
         else:
             self.head = node
 
-    def add_node_by_value(self, value):
-        """shortcut for users to create node and append to list in one step.
-        """
-        node = Node(value)
-        self.add_node(node)
-
-    def insert_node_at_index(self, index, node):
+    def insert_node_at_index(self, index, value):
         """insert a new node at specific location in list.
         """
 
+        node = Node(value)
+
         if self.head:
-            # check if list has cycle to prevent infinite while loop
-            if self.has_cycle():
-                print "error - list has a cycle"
-                return
-            else:
-                if index == 0:
-                #edge case - inserting at the beginning of list.
-                    current = self.head
-                    self.head = node
-                    node.next = current
 
-                count = 0
+            if index == 0:
+            #edge case - inserting at the beginning of list.
                 current = self.head
-                next_node = current.next
-
-                while next_node:
-                    if count == index:
-                        current.next = node
-                        node.next = next_node
-                        return
-                    else:
-                        current = next_node
-                        next_node = current.next
-                        count += 1
+                self.head = node
+                node.next = current
                 return
+
+            count = 0
+            current = self.head
+            next_node = current.next
+
+            while next_node:
+                if count == index:
+                    current.next = node
+                    node.next = next_node
+                    return
+                else:
+                    current = next_node
+                    next_node = current.next
+                    count += 1
+            
+            # edge case - if index is at the end of the list
+            if count == index:
+                current.next = node
+                return
+
         else:
             # if list is empty, the only valid case is to insert at 0
             if index == 0:
                 self.head = node
+                return
 
         # otherwise, request cannot be completed.
         print "request not valid. out of range"
 
-
-    def remove_nodes_by_val(self, value):
+    def remove(self, value):
         """traverse loop. Find any node with the given value
             (may be multiple!) and remove it/them from list.
         """
 
         if self.head:
-            if self.has_cycle():
-                print "error - list has a cycle"
-                return
-            else:
-                count = 0
-                # if the head itself need to be removed:
-                if self.head.data == value:
-                    self.head = self.head.next
+            count = 0
+
+            # edge case - if the head itself need to be removed
+            # continue until the head is a node that does NOT need to be removed.
+            while self.head.data == value:
+                self.head = self.head.next
+                count += 1
+
+            #traverse list
+            current = self.head
+            prev = current
+            
+            while current:
+
+                if current.data == value:
+                    # make prev point to next, cutting current out of list
+                    prev.next = current.next
+                    # prev doesn't change, but traverse to next node for evaluation
+                    current = current.next
                     count += 1
+                else:
+                    #traverse to the next node for evaluation
+                    prev = current
+                    current = current.next
 
-                #traverse list
-                current = self.head
-                prev = current
-                
-                while current:
-                # to correct a cycle???
-                    if current.data == value:
-                        # make prev point to next, cutting current out of list
-                        prev.next = current.next
-                        # prev doesn't change, but traverse to next node for evaluation
-                        current = current.next
-                        count += 1
-                    else:
-                        #traverse to the next node for evaluation
-                        prev = current
-                        current = current.next
+            print "\n", value, "was found and deleted", count, "time(s)."
 
-                print "\n", value, "was found and deleted", count, "time(s)."
-
-    def remove_node_by_index(self, index):
+    def remove_at(self, index):
         """remove node at a specific location in list.
         """
 
@@ -189,7 +188,7 @@ class S_linked_list(object):
 
         return False
 
-    def reverse_list(self):
+    def reverse_in_place(self):
         
         if self.head:
             if self.has_cycle():
@@ -211,6 +210,16 @@ class S_linked_list(object):
 
         else:
             return
+
+    def reverse(self):
+        """return a COPY of the list reversed, but do not affect the original.
+        """
+        pass
+
+    def next(self):
+        """iterator functionality -- returns as tuple of the next piece of data and a bool for if there is more
+        """
+        pass
 
 
 if __name__ == '__main__':
