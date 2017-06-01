@@ -4,7 +4,7 @@ def build_sudoku_board(values_str):
         e.g. "47.5.39..." etc.  exactly 81 chars long (9x9)
     """
 
-    board = Board()
+    board = Board(values_str)
 
     row = 1
     column = 1
@@ -30,10 +30,11 @@ def build_sudoku_board(values_str):
 
 class Board(object):
 
-    def __init__(self):
+    def __init__(self, origin_str):
         self.cells_settled = set([])
         self.cells_open = set([])
         self.is_complete = False
+        self.origin_str = origin_str
 
     def insert_cell(self, cell):
         if cell.value:
